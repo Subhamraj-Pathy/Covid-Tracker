@@ -4,7 +4,7 @@ import styles from './Chart.module.css'
 
 import { fetchDailyData } from '../../api'
 
-const Chart = () => {
+const Chart = ({ data, country}) => {
 
     const [dailyData, setDailyData] = useState([])
 
@@ -42,9 +42,33 @@ const Chart = () => {
             null
     )
 
+    const barChart = (
+        data.confirmed ?
+            <Bar
+                data = {{
+                    labels: ['Infected', 'Recovered', 'Deaths'],
+                    datasets:[
+                        {
+                           label: 'People',
+                           backgroundColor: ['rgba(0, 0, 255, 0.7)', 'rgba(0, 255, 0, 0.7)', 'rgba(255, 0, 0, 0.7)'],
+                           data: [data.confirmed.value, data.recovered.value, data.deaths.value] 
+                        }
+                    ]
+                }}
+                options = {{
+                    legend: {display: false},
+                    title: {display: true, text: `Status Of ${country}`}
+                }}
+            />
+        :
+            null
+    )
+
     return (
         <div className={styles.container}>
-            {lineChart}
+            {
+                country && country != 'global' ? barChart : lineChart
+            }
         </div>
     );
 };

@@ -10,7 +10,8 @@ import styles from './App.module.css'
 class App extends Component {
 
     state = {
-        data: {}
+        data: {},
+        country: ''
     }
 
     async componentDidMount() {
@@ -18,12 +19,18 @@ class App extends Component {
         this.setState({data: fetchedData})
     }
 
+    handleCountryChange = async (country) => {
+        console.log(country)
+        const fetchedData = await fetchData(country)
+        this.setState({data: fetchedData, country: country})
+    }
+
     render() {
         return (
             <div className={styles.container}>
                 <Cards data={this.state.data} />
-                <CountryPicker />
-                <Chart />
+                <CountryPicker handleCountryChange={this.handleCountryChange} />
+                <Chart data={this.state.data} country={this.state.country} />
             </div>
         );
     }
